@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduBeta - Gestión Académica</title>
+    
+    <!-- Google Fonts: Pistas de preconexión para mejorar el rendimiento -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Importa la fuente Montserrat, específicamente el peso 900 (bold) para el logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    
+    <!-- Incluye Tailwind CSS a través de CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!--
+      Script en línea para configurar Tailwind CSS.
+      Extiende el tema por defecto con una paleta de colores personalizada 'primary'.
+      Esto permite usar clases como `bg-primary-500`, `text-primary-600`, etc.
+    -->
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: {"50":"#eff6ff","100":"#dbeafe","200":"#bfdbfe","300":"#93c5fd","400":"#60a5fa","500":"#3b82f6","600":"#2563eb","700":"#1d4ed8","800":"#1e40af","900":"#1e3a8a","950":"#172554"}
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!--
+      Mapa de Importaciones (Import Map):
+      Define alias para las importaciones de módulos de JavaScript.
+      Esto permite usar especificadores simples como 'react' en lugar de URLs completas.
+      El cargador de módulos ES del navegador usará estos mapeos para obtener las dependencias desde las URLs de CDN especificadas.
+      Esta configuración evita la necesidad de un paso de compilación local (como Webpack o Vite) para la gestión de dependencias.
+    -->
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.553.0",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "path": "https://aistudiocdn.com/path@^0.12.7",
+    "vite": "https://aistudiocdn.com/vite@^7.2.6"
+  }
+}
+</script>
+
+<!--
+  Estilos CSS Personalizados:
+  Este bloque contiene estilos personalizados que van más allá de lo que Tailwind proporciona por defecto,
+  específicamente para crear barras de desplazamiento personalizadas y una utilidad para ocultarlas.
+  - `.custom-scrollbar`: Una barra de desplazamiento estándar y estilizada para contenedores desplazables.
+  - `.sticky-scrollbar`: Una barra de desplazamiento más gruesa diseñada para el desplazador horizontal fijo de la tabla.
+  - `.hide-scrollbar`: Una utilidad para ocultar completamente la barra de desplazamiento en un elemento.
+  - Los estilos están definidos para los modos claro y oscuro.
+-->
+<style>
+  /* Barra de desplazamiento personalizada para navegadores Webkit */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9; /* slate-100 */
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1; /* slate-300 */
+    border-radius: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8; /* slate-400 */
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-track {
+    background: #1e293b; /* slate-800 */
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #475569; /* slate-600 */
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #64748b; /* slate-500 */
+  }
+
+  /* Barra de desplazamiento fija (más gruesa) */
+  .sticky-scrollbar::-webkit-scrollbar {
+    height: 14px;
+  }
+  .sticky-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .sticky-scrollbar::-webkit-scrollbar-thumb {
+    background: #94a3b8; /* slate-400 */
+    border-radius: 7px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  .sticky-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #64748b; /* slate-500 */
+  }
+
+  .dark .sticky-scrollbar::-webkit-scrollbar-thumb {
+    background: #64748b; /* slate-500 */
+  }
+  .dark .sticky-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8; /* slate-400 */
+  }
+
+  /* Utilidad para ocultar la barra de desplazamiento */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none; /* para Chrome, Safari y Opera */
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* para IE y Edge */
+    scrollbar-width: none;  /* para Firefox */
+  }
+
+  /* --- Custom Checkbox & Radio Styles --- */
+  input[type="checkbox"],
+  input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff; /* bg-white */
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid #d1d5db; /* gray-300 */
+    transform: translateY(-0.075em);
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    display: grid;
+    place-content: center;
+  }
+
+  .dark input[type="checkbox"],
+  .dark input[type="radio"] {
+    background-color: #374151; /* gray-700 */
+    border-color: #4b5563; /* gray-600 */
+  }
+
+  input[type="checkbox"] {
+    border-radius: 0.25em;
+  }
+
+  input[type="radio"] {
+    border-radius: 50%;
+  }
+
+  input[type="checkbox"]:checked,
+  input[type="radio"]:checked {
+    background-color: #2563eb; /* primary-600 */
+    border-color: #2563eb; /* primary-600 */
+  }
+  
+  /* Checkmark SVG for checkbox */
+  input[type="checkbox"]:checked {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* Dot SVG for radio */
+  input[type="radio"]:checked {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='4'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* Focus styles for accessibility */
+  input[type="checkbox"]:focus,
+  input[type="radio"]:focus {
+    outline: 2px solid #3b82f6; /* primary-500 */
+    outline-offset: 2px;
+  }
+
+  /* --- Custom Date Picker Icon Styles --- */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%234B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+      background-repeat: no-repeat;
+      background-position: center;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator:hover {
+      opacity: 1;
+  }
+
+  .dark input[type="date"]::-webkit-calendar-picker-indicator {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23D1D5DB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+  }
+</style>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-gray-50 dark:bg-slate-900">
+    <!-- El contenedor raíz donde se montará la aplicación React -->
+    <div id="root"></div>
+    <!-- 
+      El script principal de punto de entrada para la aplicación.
+      `type="module"` habilita la sintaxis moderna de módulos ES (import/export).
+      El navegador obtendrá y ejecutará este archivo, que a su vez renderiza la aplicación React.
+    -->
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
